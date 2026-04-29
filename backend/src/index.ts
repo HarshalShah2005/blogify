@@ -34,6 +34,11 @@ export const updateBlogInput = z.object({
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Create Prisma client
+const prisma = new PrismaClient({
+  datasourceUrl: process.env.DATABASE_URL,
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -49,13 +54,8 @@ app.get('/', (req, res) => {
 // Health check endpoint with database test
 app.get('/health', async (req, res) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: process.env.DATABASE_URL,
-    });
-    
     // Test database connection
     await prisma.$queryRaw`SELECT 1`;
-    await prisma.$disconnect();
     
     res.json({ 
       status: 'OK', 
@@ -73,6 +73,28 @@ app.get('/health', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Run migrations on startup
+async function runMigrations() {
+  try {
+    console.log('🔄 Running database migrations...');
+    await prisma.$executeRawUnsafe(`SELECT 1`);
+    console.log('✅ Database connected, ready to accept requests');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    process.exit(1);
+  }
+}
+
+// Start server
+async function start() {
+  await runMigrations();
+  
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+start().catch((error) => {
+  console.error('Failed to start server:', error);
+  process.exit(1);
 });
