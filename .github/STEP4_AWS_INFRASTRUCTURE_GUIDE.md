@@ -252,7 +252,7 @@ Repeat for frontend:
 8. **Subnets**: Select all
 9. **Security groups**: `ecs-blogify`
 10. **Load balancing**: Application Load Balancer
-11. **Load balancer name**: `blogify-alb`
+11. **Load balancer name**: **SELECT** `blogify-alb` from dropdown (already exists from Part 5)
 12. **Container**: `backend` : `3000`
 13. **Target group**: Create new → `blogify-backend`
 14. Click **Create service**
@@ -266,9 +266,18 @@ Repeat for frontend:
 1. Click **Create service**
 2. **Task definition**: `blogify-frontend`
 3. **Service name**: `blogify-frontend-service`
-4. **Container**: `frontend` : `80`
-5. **Target group**: `blogify-frontend` (use existing)
-6. Click **Create service**
+4. **Desired count**: 1
+5. **Load balancing**: Application Load Balancer
+6. **Load balancer name**: **SELECT** `blogify-alb` (same as backend)
+7. **Container**: `frontend` : `80`
+8. **Target group**: **CREATE NEW** with these settings:
+   - **Name**: `blogify-frontend-alb`
+   - **Target type**: **IP** (IMPORTANT! Not instance)
+   - **Protocol**: HTTP
+   - **Port**: 80
+9. Click **Create service**
+
+⚠️ **CRITICAL**: Target type must be **IP** for awsvpc network mode!
 
 ✅ Both services running
 
