@@ -79,6 +79,26 @@ Add:
 
 ## Part 2: Create ECS Cluster
 
+### Step 2.0: Create ECS Service-Linked Role (REQUIRED FIRST)
+
+⚠️ **Must do this BEFORE creating the cluster!**
+
+Run this AWS CLI command:
+
+```bash
+aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com
+```
+
+If you don't have AWS CLI installed, create it manually:
+1. Go to: https://console.aws.amazon.com/iam/home#/roles/create
+2. Click **Create role**
+3. **Trusted entity type**: AWS service
+4. **Service**: Elastic Container Service
+5. **Use case**: Elastic Container Service
+6. Click **Next** → **Create role**
+
+✅ Service-linked role created
+
 ### Step 2.1: Create ECS Cluster via Console
 
 1. Go to: https://console.aws.amazon.com/ecs/v2/clusters
@@ -90,7 +110,7 @@ Add:
 
 ✅ Cluster created
 
-### Step 2.2: Create IAM Role for ECS Task Execution
+### Step 2.2: Create IAM Task Execution Role
 
 1. Go to: https://console.aws.amazon.com/iam/home#/roles
 2. Click **Create role**
@@ -131,7 +151,10 @@ Add:
     - **Environment variables**:
       - `NODE_ENV`: production
       - `PORT`: 3000
-      - `DATABASE_URL`: `postgresql://postgres:PASSWORD@ENDPOINT:5432/blogify_production` (fill in RDS details)
+      - `DATABASE_URL`: Replace the placeholders:
+        - Replace `PASSWORD` with your RDS password from Step 1.2
+        - Replace `ENDPOINT` with your RDS endpoint from Step 1.2
+        - Example: `postgresql://postgres:MySecurePassword123@blogify-production.c4zb5m2q4z5x.us-east-1.rds.amazonaws.com:5432/blogify_production`
       - `JWT_SECRET`: (copy from your .env file)
     - **Log configuration**: 
       - **Log driver**: awslogs
