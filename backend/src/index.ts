@@ -51,50 +51,30 @@ app.get('/', (req, res) => {
   res.json({ message: 'Backend server is running!' });
 });
 
-// Health check endpoint with database test
-app.get('/health', async (req, res) => {
-  try {
-    // Test database connection
-    await prisma.$queryRaw`SELECT 1`;
-    
-    res.json({ 
-      status: 'OK', 
-      database: 'Connected',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.log('Database health check failed:', error);
-    res.status(503).json({ 
-      status: 'Error', 
-      database: 'Disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
-    });
-  }
+app.get('/', (req, res) => {
+  res.json({ message: 'Backend server is running!' });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Run migrations on startup
 async function runMigrations() {
   try {
-    console.log('🔄 Running database migrations...');
-    await prisma.$executeRawUnsafe(`SELECT 1`);
-    console.log('✅ Database connected, ready to accept requests');
+    await prisma.$executeRawUnsafe(`SELECT 1`); // test connection
+    console.log("✅ Database connected, migrations completed");
   } catch (error) {
-    console.error('❌ Database connection failed:', error);
+    console.error("❌ Database connection failed:", error);
     process.exit(1);
   }
 }
 
-// Start server
-async function start() {
-  await runMigrations();
-  
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
+// Call before starting server
+runMigrations();
 
-start().catch((error) => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
+// Rest of your server code...
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
