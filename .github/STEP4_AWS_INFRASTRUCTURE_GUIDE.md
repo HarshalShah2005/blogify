@@ -30,7 +30,7 @@ This step sets up the AWS infrastructure to run your application in the cloud:
 1. Go to: https://console.aws.amazon.com/rds/home?region=us-east-1
 2. Click **Create database**
 3. **Engine options**: PostgreSQL
-4. **Version**: PostgreSQL 15.x (latest)
+4. **Version**: PostgreSQL 18.x (latest) or 17.x (stable)
 5. **Templates**: Production (recommended)
 6. **DB instance identifier**: `blogify-production`
 7. **Master username**: `postgres`
