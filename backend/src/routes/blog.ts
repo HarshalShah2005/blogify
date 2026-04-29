@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBlogInput, updateBlogInput } from "../../index";
+import { createBlogInput, updateBlogInput } from "../index";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import jwt from 'jsonwebtoken';
@@ -121,10 +121,10 @@ router.get('/bulk', authMiddleware, async (req: AuthRequest, res) => {
             })
         ]);
 
-        const likedBlogIds = new Set(userLikes.map((like: { blogId: number }) => like.blogId));
-        const savedBlogIds = new Set(userSavedPosts.map((saved: { blogId: number }) => saved.blogId));
+        const likedBlogIds = new Set(userLikes.map((like: any) => like.blogId));
+        const savedBlogIds = new Set(userSavedPosts.map((saved: any) => saved.blogId));
 
-        const blogsWithUserData = blogs.map(blog => ({
+        const blogsWithUserData = blogs.map((blog: any) => ({
             ...blog,
             liked: likedBlogIds.has(blog.id),
             saved: savedBlogIds.has(blog.id),

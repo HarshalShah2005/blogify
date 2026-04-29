@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { signupInput, signinInput } from "../../index";
+import { signupInput, signinInput } from "../index";
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "Harshal";
@@ -290,7 +290,7 @@ router.get('/:id/followers', async (req, res) => {
   
   res.json({
     count: followers.length,
-    users: followers.map(f => f.follower)
+    users: followers.map((f: any) => f.follower)
   });
 });
 
@@ -308,7 +308,7 @@ router.get('/:id/following', async (req, res) => {
   
   res.json({
     count: following.length,
-    users: following.map(f => f.following)
+    users: following.map((f: any) => f.following)
   });
 });
 
@@ -419,7 +419,7 @@ router.get('/profile/:id/posts', async (req: AuthRequest, res) => {
     });
 
     // If current user is viewing, check their likes and saves
-    const blogsWithStatus = await Promise.all(blogs.map(async (blog) => {
+    const blogsWithStatus = await Promise.all(blogs.map(async (blog: any) => {
       let liked = false;
       let saved = false;
       
@@ -488,7 +488,7 @@ router.get('/profile/:id/likes', async (req: AuthRequest, res) => {
     });
 
     // Check current user's likes and saves for these posts
-    const likesWithStatus = await Promise.all(likes.map(async (like) => {
+    const likesWithStatus = await Promise.all(likes.map(async (like: any) => {
       let currentUserLiked = false;
       let currentUserSaved = false;
       
@@ -553,7 +553,7 @@ router.get('/profile/:id/comments', async (req, res) => {
     });
 
     res.json({ 
-      comments: comments.map(comment => ({
+      comments: comments.map((comment: any) => ({
         id: comment.id,
         content: comment.content,
         createdAt: comment.createdAt.toISOString(),

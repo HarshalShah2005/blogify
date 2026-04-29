@@ -1,11 +1,35 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { z } from 'zod';
 import { userRouter } from './routes/user';
 import { blogRouter } from './routes/blog';
 import { PrismaClient } from '@prisma/client';
 
 dotenv.config();
+
+// Validation schemas
+export const signupInput = z.object({
+  email: z.string().email().optional(),
+  name: z.string(),
+  username: z.string(),
+  password: z.string().min(6),
+});
+
+export const signinInput = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+export const createBlogInput = z.object({
+  title: z.string(),
+  content: z.string(),
+});
+
+export const updateBlogInput = z.object({
+  title: z.string().optional(),
+  content: z.string().optional(),
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
