@@ -25,6 +25,8 @@ This step sets up the AWS infrastructure to run your application in the cloud:
 
 ## Part 1: Create RDS PostgreSQL Database
 
+> ⚠️ **Free Tier Note**: If using AWS free tier, you cannot have automated backups. Set **Backup retention to 0 days** (step 17 below). This is a free tier limitation, not a bug.
+
 ### Step 1.1: Create RDS Instance via AWS Console
 
 1. Go to: https://console.aws.amazon.com/rds/home?region=us-east-1
@@ -42,7 +44,7 @@ This step sets up the AWS infrastructure to run your application in the cloud:
 13. **Public accessibility**: Yes
 14. **VPC security group**: Create new → Name: `rds-blogify`
 15. **Database name**: `blogify_production`
-16. **Backup retention**: 7 days
+17. **Backup retention**: `0 days` (free tier limitation - set to 0, not 7)
 17. Click **Create database**
 
 ⏳ **Wait 5-10 minutes** for creation
