@@ -207,7 +207,12 @@ Repeat for frontend:
 4. **Inbound rules**:
    - Custom TCP (port 3000) from `alb-blogify` security group
    - Custom TCP (port 80) from `alb-blogify` security group
-5. Click **Create security group**
+5. **Outbound rules** (IMPORTANT - add these):
+   - HTTPS (port 443) to 0.0.0.0/0 (for ECR image pulls)
+   - PostgreSQL (port 5432) to 0.0.0.0/0 (for RDS database)
+6. Click **Create security group**
+
+⚠️ **CRITICAL**: Without outbound rules, tasks cannot pull images from ECR or connect to RDS!
 
 ---
 
