@@ -20,8 +20,6 @@ COPY backend/prisma ./prisma
 # Build TypeScript to JavaScript
 RUN npm run build
 
----
-
 # Stage 2: Production stage
 FROM node:18-alpine
 

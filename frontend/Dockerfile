@@ -25,8 +25,6 @@ COPY frontend/postcss.config.js ./
 # Build the application
 RUN npm run build
 
----
-
 # Stage 2: Production stage - Nginx
 FROM nginx:alpine
 
