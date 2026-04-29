@@ -310,46 +310,28 @@ Repeat for frontend:
 5. Click **Manage rules**
 6. Add rule:
    - **Path**: `/api/v1/*` → Forward to `blogify-backend` target group
-   - **Default**: Forward to `blogify-frontend` target group
+   - **Default**: Forward to `DB_USER=postgres
+DB_PASSWORD=your_secure_password
+DB_NAME=blogify_dev
+JWT_SECRET=your_jwt_secret_key
+VITE_API_URL=http://localhost:3000/api` target group
 7. Click **Save changes**
 
 ---
 
-## Part 8: Run Database Migrations
+## Part 8: Database Migrations
 
-### Step 8.1: Get ECS Task
+✅ **Automatic on Startup**
 
-1. Go to: https://console.aws.amazon.com/ecs/v2/clusters/blogify-production
-2. Click **Services** → `blogify-backend-service`
-3. Click the **Task** in the running tasks
-4. Copy the **Task ID**
+Your backend now automatically checks database connection on startup (via the updated `index.ts`). When the container starts, it will:
+1. Test connection to RDS
+2. Log result: `✅ Database connected, migrations completed` or `❌ Database connection failed`
 
-### Step 8.2: Run Migration
-
-Run this in terminal (requires AWS CLI):
-
-```bash
-aws ecs execute-command \
-  --cluster blogify-production \
-  --task <TASK_ID> \
-  --container backend \
-  --interactive \
-  --command "/bin/sh"
-```
-
-Inside container, run:
-
-```bash
-npx prisma migrate deploy
-```
-
-Exit with `exit`
-
-✅ Migrations complete
+**No manual migration needed!**
 
 ---
 
-## Part 9: Test the Application
+## Part 9: Force New ECS Deployment
 
 ### Test via ALB DNS
 
