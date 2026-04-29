@@ -97,7 +97,7 @@ Add these secrets ONE BY ONE:
 **Secret #5:** Generate JWT Secret
 - Open PowerShell and run:
   ```powershell
-  openssl rand -hex 32
+  [Convert]::ToHexString((1..32 | ForEach-Object { Get-Random -Maximum 256 })) -Replace ' ', ''
   ```
 - Copy the output (long random string)
 - Click "New repository secret"
