@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (Neon alternative for local development)
+  postgres:
+    image: postgres:15-alpine
+    container_name: blogify-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-neondb_owner}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-neondb}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-neondb_owner}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - blogify-network
+
+  # Backend Service
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: blogify-backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://${DB_USER:-neondb_owner}:${DB_PASSWORD:-password}@postgres:5432/${DB_NAME:-neondb}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/backend/src
+    command: npm run dev
+    networks:
+      - blogify-network
+    restart: unless-stopped
+
+  # Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: blogify-frontend
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+    depends_on:
+      - backend
+    networks:
+      - blogify-network
+    restart: unless-stopped
+
+networks:
+  blogify-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
