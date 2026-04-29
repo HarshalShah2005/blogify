@@ -2,8 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { z } from 'zod';
-import { userRouter } from './routes/user';
-import { blogRouter } from './routes/blog';
+import { userRouter } from './routes/user.js';
+import { blogRouter } from './routes/blog.js';
 import { PrismaClient } from '@prisma/client';
 
 dotenv.config();

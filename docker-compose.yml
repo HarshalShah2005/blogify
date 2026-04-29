@@ -30,16 +30,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 3000
       DATABASE_URL: postgresql://${DB_USER:-neondb_owner}:${DB_PASSWORD:-password}@postgres:5432/${DB_NAME:-neondb}
       JWT_SECRET: ${JWT_SECRET:-your-secret-key}
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - ./backend/src:/app/backend/src
-    command: npm run dev
+    command: node dist/index.js
     networks:
       - blogify-network
     restart: unless-stopped
