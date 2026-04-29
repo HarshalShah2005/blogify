@@ -37,7 +37,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: node dist/index.js
+    command: sh -c "npx prisma migrate deploy || { echo 'Migration failed'; exit 1; } && node dist/index.js"
     networks:
       - blogify-network
     restart: unless-stopped
