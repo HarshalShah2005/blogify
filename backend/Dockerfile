@@ -28,6 +28,9 @@ FROM node:18-alpine
 
 WORKDIR /app/backend
 
+# Install required system dependencies for Prisma
+RUN apk add --no-cache openssl libssl3
+
 # Install dumb-init to handle signals properly
 RUN apk add --no-cache dumb-init
 
