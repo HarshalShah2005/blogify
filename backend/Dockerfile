@@ -37,9 +37,14 @@ COPY backend/package*.json ./
 # Install only production dependencies
 RUN npm install --omit=dev
 
+# Copy prisma schema for generation
+COPY backend/prisma ./prisma
+
+# Generate Prisma client
+RUN npx prisma generate
+
 # Copy built application from builder
 COPY --from=builder /app/backend/dist ./dist
-COPY --from=builder /app/backend/prisma ./prisma
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
