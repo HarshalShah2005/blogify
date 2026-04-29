@@ -91,7 +91,7 @@ Add these secrets ONE BY ONE:
 **Secret #4:**
 - Click "New repository secret"
 - Name: `DATABASE_URL`
-- Value: `postgresql://user:password@localhost:5432/medium`
+- Value: `postgresql://neondb_owner:npg_s8PjUA2GLDdw@ep-odd-breeze-adxxl9ap.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require`
 - Click "Add secret"
 
 **Secret #5:** Generate JWT Secret
