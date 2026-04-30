@@ -14,7 +14,10 @@ pipeline {
 
         stage('Stop Previous Containers') {
             steps {
-                bat 'docker compose down --remove-orphans || exit /b 0'
+                bat '''
+                    docker compose down -v --remove-orphans || exit /b 0
+                    docker compose rm -f || exit /b 0
+                '''
             }
         }
 
