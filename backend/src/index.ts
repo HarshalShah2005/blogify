@@ -51,10 +51,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'Backend server is running!' });
 });
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Backend server is running!' });
-});
-
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
