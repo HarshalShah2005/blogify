@@ -38,7 +38,7 @@ pipeline {
             steps {
                 bat '''
                     echo Waiting for services to be healthy...
-                    timeout /t 30
+                    ping -n 31 127.0.0.1 > nul
                     docker compose ps
                     docker compose logs --tail=50
                 '''
