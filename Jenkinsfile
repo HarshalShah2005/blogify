@@ -17,6 +17,7 @@ pipeline {
                 bat '''
                     docker compose down -v --remove-orphans || exit /b 0
                     docker compose rm -f || exit /b 0
+                    docker rm -f blogify-postgres blogify-frontend blogify-backend || exit /b 0
                 '''
             }
         }
