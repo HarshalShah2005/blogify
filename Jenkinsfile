@@ -14,27 +14,27 @@ pipeline {
 
         stage('Stop Previous Containers') {
             steps {
-                sh 'docker compose down --remove-orphans || true'
+                bat 'docker compose down --remove-orphans || exit /b 0'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'docker compose build'
+                bat 'docker compose build'
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker compose up -d'
+                bat 'docker compose up -d'
             }
         }
 
         stage('Health Check') {
             steps {
-                sh '''
-                    echo "Waiting for services to be healthy..."
-                    sleep 30
+                bat '''
+                    echo Waiting for services to be healthy...
+                    timeout /t 30
                     docker compose ps
                     docker compose logs --tail=50
                 '''
@@ -44,10 +44,10 @@ pipeline {
 
     post {
         failure {
-            sh 'docker compose logs --tail=100 || true'
+            bat 'docker compose logs --tail=100 || exit /b 0'
         }
         always {
-            sh 'docker compose logs > deployment.log 2>&1 || true'
+            bat 'docker compose logs > deployment.log 2>&1 || exit /b 0'
         }
     }
 }
